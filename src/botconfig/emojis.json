@@ -1,0 +1,26 @@
+{
+    "check": "<a:check_yes:1271141079789338687>",
+    "deny": "<a:no_check:1271141069689721027>",
+    "neutral": "<:check_yellow:1271141059681849404>",
+    "uses": {
+        "alarm": "⏰"
+    },
+    "buttons": {
+        "arrow_back": "⬅️",
+        "arrow_advance": "➡️",
+        "trash": "🗑️",
+        "page_list": "📋",
+        "arrowsshuffle": "🎲"
+    },
+    "progress_bar": {
+        "leftindicator": "[",
+        "rightindicator": "]",
+        "emptyframe": "⬜",
+        "filledframe": "🟩"
+    },
+    "badges": {
+        "owner": "<:owner_badge:1270070596612526111>",
+        "admin": "<:admin_badge:1270075169645400236>",
+        "mod": "<:mod_badge:1270075158085898280>"
+    }
+}

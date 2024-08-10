@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  discordId String @unique
+  username  String
+  balance   Float  @default(0)
+}
+
+model UserProfile {
+  id               Int             @id @default(autoincrement())
+  userId           String          @unique
+  badges           String[]
+  friends          Int             @default(0)
+  rank             String          @default("User")
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  sentRequests     FriendRequest[] @relation("SentRequests")
+  receivedRequests FriendRequest[] @relation("ReceivedRequests")
+}
+
+model FriendRequest {
+  id         Int           @id @default(autoincrement())
+  senderId   String
+  receiverId String
+  status     RequestStatus @default(Pending)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  sender   UserProfile @relation("SentRequests", fields: [senderId], references: [userId])
+  receiver UserProfile @relation("ReceivedRequests", fields: [receiverId], references: [userId])
+}
+
+//Datos del servidor
+model Guild {
+  id          Int       @id @default(autoincrement())
+  guildId     String    @unique
+  caseCounter Int       @default(0)
+  warnings    Warning[]
+  muteRole    String?
+}
+
+//Moderación de usuario
+model Warning {
+  id          Int       @id @default(autoincrement())
+  userId      String
+  moderatorId String
+  action      Action
+  reason      String
+  case        Int
+  date        DateTime  @default(now())
+  muteEnd     DateTime?
+
+  guildId Int
+  guild   Guild @relation(fields: [guildId], references: [id])
+}
+
+enum RequestStatus {
+  Pending
+  Accepted
+  Declined
+}
+
+enum Action {
+  Warn
+  Mute
+  Kick
+  Ban
+}
